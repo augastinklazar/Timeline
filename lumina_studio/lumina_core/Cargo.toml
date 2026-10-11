@@ -5,3 +5,6 @@ edition = "2021"
 
 [dependencies]
 uuid = { workspace = true }
+rusqlite = { workspace = true }
+ffmpeg-next = { workspace = true }
+tokio = { workspace = true }

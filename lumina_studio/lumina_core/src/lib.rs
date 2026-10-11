@@ -1,8 +1,8 @@
+pub mod db;
+pub mod media;
+
 use std::hash::Hash;
 
-// ============================================================================
-// Precision Rational Time
-// ============================================================================
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct RationalTime {
     pub value: i64,

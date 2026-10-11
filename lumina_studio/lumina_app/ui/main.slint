@@ -1,0 +1,52 @@
+export component AppWindow inherits Window {
+    title: "Lumina Studio: Hybrid NLE / AE Compositor";
+    width: 1280px;
+    height: 720px;
+    background: #1e1e1e;
+
+    VerticalLayout {
+        padding: 5px;
+        spacing: 5px;
+
+        // Top Half: Viewports
+        HorizontalLayout {
+            spacing: 5px;
+
+            Rectangle {
+                background: #2a2a2a;
+                border-radius: 4px;
+                Text {
+                    text: "Media Pool / Source";
+                    color: white;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+
+            Rectangle {
+                background: #2a2a2a;
+                border-radius: 4px;
+                Text {
+                    text: "Timeline Canvas / Output Viewport";
+                    color: white;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+
+        // Bottom Half: The Hybrid Timeline / Compositing Stack
+        Rectangle {
+            background: #252525;
+            border-radius: 4px;
+            height: 350px;
+
+            Text {
+                text: "Hybrid Layer Stack & Timeline Graph";
+                color: #888888;
+                x: 10px;
+                y: 10px;
+            }
+        }
+    }
+}

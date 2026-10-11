@@ -12,6 +12,12 @@ resolver = "2"
 uuid = { version = "1.7.0", features = ["v4"] }
 wgpu = "0.19"
 slint = "1.5"
+slint-build = "1.5"
+rusqlite = { version = "0.31", features = ["bundled"] }
+ffmpeg-next = "7.0"
+winit = "0.29"
+pollster = "0.3"
+tokio = { version = "1.37", features = ["full"] }
 
 [profile.release]
 opt-level = 3
