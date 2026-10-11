@@ -1,0 +1,8 @@
+[package]
+name = "lumina_app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lumina_core = { path = "../lumina_core" }
+lumina_timeline = { path = "../lumina_timeline" }

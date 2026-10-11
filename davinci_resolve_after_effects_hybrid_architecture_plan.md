@@ -14,6 +14,23 @@ Commercial software suites (DaVinci Resolve, Adobe Premiere Pro, Adobe After Eff
 - Monolithic architectures causing non-graceful crashes.
 - Proprietary file systems and siloed ecosystems requiring slow dynamic linking between applications.
 
+
+### 1.3 Addressed Industry Pain Points (The "Why")
+Lumina is architected explicitly to solve the most notorious issues plaguing legacy NLEs (specifically DaVinci Resolve and Adobe After Effects):
+
+1. **"Media Offline" & Cache Bloat (Resolve):**
+   * *Problem:* Resolve frequently loses links to source files, and its optimized media/render cache silently fills up terabytes of disk space.
+   * *Lumina Solution:* A unified SQLite `WAL` mode project database that stores relative UUID-based asset paths instead of absolute OS paths. The `L3 Disk Cache` uses a deterministic LRU (Least Recently Used) eviction policy bounded strictly by user-defined quotas (e.g., "Max 50GB cache").
+2. **Database Corruption (Resolve):**
+   * *Problem:* PostgreSQL/Disk database corruption in Resolve can destroy hundreds of hours of work.
+   * *Lumina Solution:* Single-file `.lumina` (SQLite) containers. Every project save is an atomic transaction. A built-in rolling backup system automatically retains the last 10 transaction states.
+3. **The "Fusion" Steep Learning Curve (Resolve vs AE):**
+   * *Problem:* Resolve's motion graphics tab (Fusion) uses a Node DAG for *everything*. While nodes are mathematically pure, they are highly unintuitive for layer-based, timeline-oriented motion design (which After Effects excels at).
+   * *Lumina Solution:* A hybrid UI. We keep the strict node DAG *only* for the **Color Page** (where nodes are superior for color science). For the **Compositing Page**, we introduce an After Effects-style **2.5D Layer Stack**. Under the hood, Lumina dynamically compiles the user's layer stack into a compute DAG, offering the intuitive AE workflow with node-like performance.
+4. **Single-Core Bottlenecks (After Effects):**
+   * *Problem:* AE historically struggles with multi-frame rendering due to ancient sequential rendering pipelines.
+   * *Lumina Solution:* Written in Rust with `wgpu`. Every layer transform, mask calculation, and blend operation is dispatched asynchronously to the GPU as WGSL compute shaders.
+
 ### 1.2 Architectural Principles
 * **Sub-100 MB Distribution Binary:** Single statically linked binary (excluding optional system-wide ML model weights).
 * **Deterministic Sub-Second Startup:** Under 500 ms initialization to interactive state.
@@ -165,8 +182,10 @@ pub struct TimelineClip {
 
 ---
 
+
 ### Module 2: The Compositing Subsystem (After Effects Engine)
 The compositor handles multi-layer hierarchies, 2.5D transformations, parenting, blending, and vector masks.
+Crucially, **the output of any Compositor sequence can act as an atomic clip node in the Color Page's DAG.** This bridges the AE layer-based mental model with the DaVinci node-based mental model seamlessly.
 
 #### 2.1 Layer Hierarchy & 2.5D Transform Graph
 Each layer maintains animatable transformation vectors. Child layers compute their local-to-world matrix by multiplying their transformation matrix with their parent's global matrix:
