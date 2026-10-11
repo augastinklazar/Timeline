@@ -8,3 +8,4 @@ uuid = { workspace = true }
 rusqlite = { workspace = true }
 ffmpeg-next = { workspace = true }
 tokio = { workspace = true }
+cpal = { workspace = true }

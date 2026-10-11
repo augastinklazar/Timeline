@@ -18,6 +18,7 @@ ffmpeg-next = "7.0"
 winit = "0.29"
 pollster = "0.3"
 tokio = { version = "1.37", features = ["full"] }
+cpal = "0.15"
 
 [profile.release]
 opt-level = 3

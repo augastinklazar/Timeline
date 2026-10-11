@@ -1,5 +1,6 @@
 pub mod db;
 pub mod media;
+pub mod audio;
 
 use std::hash::Hash;
 
