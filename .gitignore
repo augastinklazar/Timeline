@@ -1,0 +1,5 @@
+target/
+**/*.rs.bk
+lumina_studio/target/
+lumina_studio/target
+lumina_studio/target/

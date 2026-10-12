@@ -1,0 +1,28 @@
+[workspace]
+members = [
+    "lumina_core",
+    "lumina_timeline",
+    "lumina_color",
+    "lumina_compositor",
+    "lumina_app"
+]
+resolver = "2"
+
+[workspace.dependencies]
+uuid = { version = "1.7.0", features = ["v4"] }
+wgpu = "0.19"
+slint = "1.5"
+slint-build = "1.5"
+rusqlite = { version = "0.31", features = ["bundled"] }
+ffmpeg-next = "7.0"
+winit = "0.29"
+pollster = "0.3"
+tokio = { version = "1.37", features = ["full"] }
+cpal = "0.15"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = 'abort'
+strip = true
