@@ -1,6 +1,8 @@
 [package]
 name = "lumina_compositor"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+lumina_core = { path = "../lumina_core" }
+uuid = { workspace = true }

@@ -2999,6 +2999,10 @@ version = "0.1.0"
 [[package]]
 name = "lumina_compositor"
 version = "0.1.0"
+dependencies = [
+ "lumina_core",
+ "uuid",
+]
 
 [[package]]
 name = "lumina_core"
