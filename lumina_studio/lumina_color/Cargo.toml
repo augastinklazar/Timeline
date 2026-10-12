@@ -1,6 +1,14 @@
 [package]
 name = "lumina_color"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+lumina_core = { path = "../lumina_core" }
+uuid = { workspace = true }
+cxx = { workspace = true }
+wgpu = { workspace = true }
+pollster = { workspace = true }
+
+[build-dependencies]
+cxx-build = "1.0"
