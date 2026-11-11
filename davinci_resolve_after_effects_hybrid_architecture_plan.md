@@ -607,6 +607,9 @@ pub struct CorrectorNode {
 impl CorrectorNode {
     pub fn process(&self, px: Rgba32F) -> Rgba32F {
         // 1. Offset
+        let mut var_r = px.r + self.wheels.offset.0;
+        let mut var_g = px.g + self.wheels.offset.1;
+        let mut var_b = px.b + self.wheels.offset.2;
         let var_r = px.r + self.wheels.offset.0;
         let var_g = px.g + self.wheels.offset.1;
         let var_b = px.b + self.wheels.offset.2;
