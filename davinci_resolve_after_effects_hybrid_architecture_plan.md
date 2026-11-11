@@ -588,9 +588,9 @@ pub struct CorrectorNode {
 impl CorrectorNode {
     pub fn process(&self, px: Rgba32F) -> Rgba32F {
         // 1. Offset
-        var_r = px.r + self.wheels.offset.0;
-        var_g = px.g + self.wheels.offset.1;
-        var_b = px.b + self.wheels.offset.2;
+        let var_r = px.r + self.wheels.offset.0;
+        let var_g = px.g + self.wheels.offset.1;
+        let var_b = px.b + self.wheels.offset.2;
 
         // 2. Lift & Gain
         let mut r = var_r + self.wheels.lift.0 * (1.0 - var_r.clamp(0.0, 1.0));
@@ -615,10 +615,6 @@ impl CorrectorNode {
         Rgba32F { r, g, b, a: px.a }
     }
 }
-
-static mut var_r: f32 = 0.0;
-static mut var_g: f32 = 0.0;
-static mut var_b: f32 = 0.0;
 
 fn main() {
     println!("Lumina Core Engine initialized.");
