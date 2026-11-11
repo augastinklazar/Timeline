@@ -1,0 +1,125 @@
+export component AppWindow inherits Window {
+    title: "Lumina Studio: Hybrid NLE / AE Compositor";
+    width: 1280px;
+    height: 720px;
+    background: #1e1e1e;
+
+    VerticalLayout {
+        padding: 5px;
+        spacing: 5px;
+
+        // Top Half: Viewports
+        HorizontalLayout {
+            spacing: 5px;
+
+            Rectangle {
+                background: #2a2a2a;
+                border-radius: 4px;
+                Text {
+                    text: "Media Pool / Source";
+                    color: white;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+
+            Rectangle {
+                background: #2a2a2a;
+                border-radius: 4px;
+                Text {
+                    text: "Timeline Canvas / Output Viewport";
+                    color: white;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+
+        // Bottom Half: The Hybrid Timeline / Compositing Stack
+        Rectangle {
+            background: #252525;
+            border-radius: 4px;
+            height: 350px;
+
+            VerticalLayout {
+                spacing: 2px;
+                padding: 10px;
+
+                Text {
+                    text: "Hybrid Layer Stack & Timeline Graph";
+                    color: #888888;
+                    height: 20px;
+                }
+
+                // Time Ruler Placeholder
+                Rectangle {
+                    height: 20px;
+                    background: #333333;
+                    Text {
+                        text: "00:00:00:00     |     00:00:01:00     |     00:00:02:00";
+                        color: #aaaaaa;
+                        font-size: 10px;
+                        y: 5px;
+                        x: 150px;
+                    }
+                }
+
+                // V2 Track (AE Layer Style)
+                HorizontalLayout {
+                    height: 40px;
+                    spacing: 2px;
+
+                    // Track Header
+                    Rectangle {
+                        width: 140px;
+                        background: #2d2d2d;
+                        Text { text: "V2  |  Text Layer"; color: #ffffff; x: 10px; y: 12px; }
+                    }
+
+                    // Track Body
+                    Rectangle {
+                        background: #1c1c1c;
+                        // Simulated Clip on V2
+                        Rectangle {
+                            x: 50px;
+                            width: 200px;
+                            height: 30px;
+                            y: 5px;
+                            background: #d67b27;
+                            border-radius: 3px;
+                            Text { text: "Lower Third .png"; color: white; x: 5px; y: 6px; font-size: 12px; }
+                        }
+                    }
+                }
+
+                // V1 Track (Video Plater)
+                HorizontalLayout {
+                    height: 40px;
+                    spacing: 2px;
+
+                    // Track Header
+                    Rectangle {
+                        width: 140px;
+                        background: #2d2d2d;
+                        Text { text: "V1  |  B-Roll 01"; color: #ffffff; x: 10px; y: 12px; }
+                    }
+
+                    // Track Body
+                    Rectangle {
+                        background: #1c1c1c;
+                        // Simulated Clip on V1
+                        Rectangle {
+                            x: 0px;
+                            width: 350px;
+                            height: 30px;
+                            y: 5px;
+                            background: #4676b5;
+                            border-radius: 3px;
+                            Text { text: "B_Roll_01.mp4"; color: white; x: 5px; y: 6px; font-size: 12px; }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

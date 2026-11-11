@@ -1,0 +1,11 @@
+[package]
+name = "lumina_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+uuid = { workspace = true }
+rusqlite = { workspace = true }
+ffmpeg-next = { workspace = true }
+tokio = { workspace = true }
+cpal = { workspace = true }
