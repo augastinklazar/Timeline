@@ -624,4 +624,145 @@ fn main() {
     println!("Lumina Core Engine initialized.");
     println!("Architecture specification ready for implementation.");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const EPSILON: f32 = 1e-5;
+
+    fn assert_approx_eq(a: f32, b: f32) {
+        assert!((a - b).abs() < EPSILON, "{} is not approximately equal to {}", a, b);
+    }
+
+    #[test]
+    fn test_evaluate_at_empty_keyframes() {
+        let prop = AnimatableProperty {
+            base_value: 10.0,
+            keyframes: vec![],
+        };
+        assert_eq!(prop.evaluate_at(RationalTime::new(0, 2)), 10.0);
+        assert_eq!(prop.evaluate_at(RationalTime::new(10, 2)), 10.0);
+    }
+
+    #[test]
+    fn test_evaluate_at_before_first_keyframe() {
+        let prop = AnimatableProperty {
+            base_value: 0.0,
+            keyframes: vec![
+                Keyframe {
+                    time: RationalTime::new(2, 1),
+                    value: 20.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+            ],
+        };
+        assert_eq!(prop.evaluate_at(RationalTime::new(0, 2)), 20.0);
+        assert_eq!(prop.evaluate_at(RationalTime::new(1, 1)), 20.0);
+    }
+
+    #[test]
+    fn test_evaluate_at_after_last_keyframe() {
+        let prop = AnimatableProperty {
+            base_value: 0.0,
+            keyframes: vec![
+                Keyframe {
+                    time: RationalTime::new(2, 1),
+                    value: 20.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+                Keyframe {
+                    time: RationalTime::new(4, 1),
+                    value: 40.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+            ],
+        };
+        assert_eq!(prop.evaluate_at(RationalTime::new(10, 2)), 40.0);
+        assert_eq!(prop.evaluate_at(RationalTime::new(20, 2)), 40.0);
+    }
+
+    #[test]
+    fn test_evaluate_at_exactly_on_keyframe() {
+        let prop = AnimatableProperty {
+            base_value: 0.0,
+            keyframes: vec![
+                Keyframe {
+                    time: RationalTime::new(1, 1),
+                    value: 10.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+                Keyframe {
+                    time: RationalTime::new(3, 1),
+                    value: 30.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+            ],
+        };
+        assert_eq!(prop.evaluate_at(RationalTime::new(1, 1)), 10.0);
+        assert_eq!(prop.evaluate_at(RationalTime::new(3, 1)), 30.0);
+    }
+
+    #[test]
+    fn test_evaluate_at_linear_interpolation() {
+        let prop = AnimatableProperty {
+            base_value: 0.0,
+            keyframes: vec![
+                Keyframe {
+                    time: RationalTime::new(0, 2),
+                    value: 0.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+                Keyframe {
+                    time: RationalTime::new(20, 2),
+                    value: 100.0,
+                    interpolation: KeyframeInterpolation::Linear,
+                },
+            ],
+        };
+
+        // 25% through
+        assert_approx_eq(prop.evaluate_at(RationalTime::new(5, 2)), 25.0);
+        // 50% through
+        assert_approx_eq(prop.evaluate_at(RationalTime::new(10, 2)), 50.0);
+        // 75% through
+        assert_approx_eq(prop.evaluate_at(RationalTime::new(15, 2)), 75.0);
+    }
+
+    #[test]
+    fn test_evaluate_at_bezier_interpolation() {
+        let prop = AnimatableProperty {
+            base_value: 0.0,
+            keyframes: vec![
+                Keyframe {
+                    time: RationalTime::new(0, 2),
+                    value: 0.0,
+                    interpolation: KeyframeInterpolation::Bezier {
+                        out_tan_x: 0.5,
+                        out_tan_y: 50.0,
+                        in_tan_x: 0.0,
+                        in_tan_y: 0.0,
+                    },
+                },
+                Keyframe {
+                    time: RationalTime::new(20, 2),
+                    value: 100.0,
+                    interpolation: KeyframeInterpolation::Linear, // outgoing interpolation doesn't matter for the last keyframe evaluating previous segment
+                },
+            ],
+        };
+
+        // Note: The simplified Bezier in the code uses `t` directly as the `u` parameter
+        // which evaluates the y-value based on the t proportion of the duration.
+        // Let's manually calculate expected at t = 0.5
+        // t = 0.5, omt = 0.5
+        // p0 = 0.0, p1 = 0.0 + 50.0 = 50.0, p2 = 100.0 - 0.0 = 100.0, p3 = 100.0
+        // omt^3 * p0 + 3*omt^2*t*p1 + 3*omt*t^2*p2 + t^3*p3
+        // (0.125 * 0) + (3 * 0.25 * 0.5 * 50) + (3 * 0.5 * 0.25 * 100) + (0.125 * 100)
+        // 0 + 18.75 + 37.5 + 12.5 = 68.75
+
+        assert_approx_eq(prop.evaluate_at(RationalTime::new(10, 2)), 68.75);
+    }
+}
+
 ```
